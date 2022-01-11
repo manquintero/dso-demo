@@ -3,7 +3,7 @@ WORKDIR /app
 COPY .  .
 RUN mvn package -DskipTests
 
-FROM openjdk:18-alpine
+FROM openjdk:19-alpine
 WORKDIR /run
 COPY --from=build /app/target/demo-0.0.1-SNAPSHOT.jar /run/demo.jar
 
