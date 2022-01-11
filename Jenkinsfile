@@ -94,7 +94,7 @@ pipeline {
             }
           }
         }
-        stage('Docker BnP') {
+        stage('OCI BnP') {
           steps {
             container('kaniko') {
               sh '/kaniko/executor -f `pwd`/Dockerfile -c `pwd` --insecure --skip-tls-verify --cache=true --destination=docker.io/manquintero/dso-demo'
@@ -103,6 +103,27 @@ pipeline {
         }
       }
     }
+
+
+    stage('Image Analysis') {
+      parallel {
+        stage('Image Linting') {
+          steps {
+            container('docker-tools') {
+              sh 'dockle docker.io/xxxxxx/dsodemo'
+            }
+          }
+        } /* Image Linting */
+
+        stage('Image Scan') {
+          steps {
+            container('docker-tools') {
+              sh 'trivy image --exit-code 1 xxxxxx/dso-demo'
+            }
+          }
+        } /* Image Scan */
+      } /* parallel */
+    } /* Image Analysis */
 
     stage('Deploy to Dev') {
       steps {
