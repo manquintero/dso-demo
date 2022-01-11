@@ -9,7 +9,7 @@ COPY --from=build /app/target/demo-0.0.1-SNAPSHOT.jar /run/demo.jar
 
 ARG USER=devops
 ENV HOME /home/${USER}
-RUN adduser -D ${USER} && \
+RUN adduser --password PASSWORD ${USER} && \
     chown ${USER}:${USER} /run/demo.jar
 
 RUN apk add curl --no-cache
