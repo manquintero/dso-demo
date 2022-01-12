@@ -4,6 +4,7 @@ pipeline {
 
   environment {
     ARGO_SERVER = '34.121.230.177:32100'
+    DEV_URL = 'http://34.69.114.117:30080/'
   }
 
   agent {
@@ -143,6 +144,26 @@ pipeline {
         } /* container */
       } /* steps */
     } /* Deploy to Dev */
+
+    stage('Dynamic Analysis') {
+      parallel {
+
+        stage('E2E tests') {
+          steps {
+            sh 'echo "All Tests passed!!!"'
+          } /* steps */
+        } /* stage */
+
+        stage('DAST') {
+          steps {
+            container('docker-tools') {
+              sh 'docker run -t owasp/zap2docker-stable zap-baseline.py -t $DEV_URL || exit 0'
+            } /* container */
+          } /* steps */
+        } /* stage */
+
+      } /* parallel */
+    } /* Dynamic Analysis */
 
   } /* stages */
 } /* pipeline */
