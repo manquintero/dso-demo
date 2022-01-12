@@ -1,6 +1,11 @@
 #!/usr/bin/env groovy
 
 pipeline {
+
+  environment {
+    ARGO_SERVER = '34.121.230.177:32100'
+  }
+
   agent {
     kubernetes {
       yamlFile 'build-agent.yaml'
@@ -126,10 +131,18 @@ pipeline {
     } /* Image Analysis */
 
     stage('Deploy to Dev') {
-      steps {
-        // TODO
-        sh "echo done"
+
+      environment {
+        AUTH_TOKEN = credentials('argocd-jenkins-deployer-token')
       }
-    }
-  }
-}
+
+      steps {
+        container('docker-tools') {
+          sh 'docker run -t schoolofdevops/argocd-cli argocd app sync dso-demo --insecure --server $ARGO_SERVER --auth-token $AUTH_TOKEN'
+          sh 'docker run -t schoolofdevops/argocd-cli argocd app wait dso-demo --health --timeout 300 --insecure --server $ARGO_SERVER --auth-token $AUTH_TOKEN'
+        } /* container */
+      } /* steps */
+    } /* Deploy to Dev */
+
+  } /* stages */
+} /* pipeline */
