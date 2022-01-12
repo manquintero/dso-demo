@@ -3,7 +3,7 @@
 pipeline {
 
   environment {
-    ARGO_SERVER : '34.121.230.177:32100'
+    ARGO_SERVER = '34.121.230.177:32100'
   }
 
   agent {
