@@ -12,7 +12,7 @@ ENV HOME /home/${USER}
 RUN useradd -p password ${USER} && \
     chown ${USER}:${USER} /run/demo.jar
 
-RUN apt update && apt install curl
+RUN apt update && apt install -y curl
 HEALTHCHECK --interval=30s --timeout=10s --retries=2 --start-period=20s \
     CMD curl -f http://localhost:8080/ || exit 1
 
