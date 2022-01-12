@@ -3,7 +3,7 @@ WORKDIR /app
 COPY .  .
 RUN mvn package -DskipTests
 
-FROM openjdk:19-jdk-slim
+FROM openjdk:19-slim-buster
 WORKDIR /run
 COPY --from=build /app/target/demo-0.0.1-SNAPSHOT.jar /run/demo.jar
 
@@ -12,7 +12,7 @@ ENV HOME /home/${USER}
 RUN useradd -p password ${USER} && \
     chown ${USER}:${USER} /run/demo.jar
 
-RUN apk add curl --no-cache
+RUN apt update && apt install curl
 HEALTHCHECK --interval=30s --timeout=10s --retries=2 --start-period=20s \
     CMD curl -f http://localhost:8080/ || exit 1
 
