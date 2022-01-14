@@ -116,7 +116,7 @@ pipeline {
         stage('Image Linting') {
           steps {
             container('docker-tools') {
-              sh 'dockle docker.io/manquintero/dso-demo'
+              // sh 'dockle docker.io/manquintero/dso-demo'
             }
           }
         } /* Image Linting */
@@ -124,12 +124,20 @@ pipeline {
         stage('Image Scan') {
           steps {
             container('docker-tools') {
-              sh 'trivy image --exit-code 0 manquintero/dso-demo'
+              // sh 'trivy image --exit-code 0 manquintero/dso-demo'
             }
           }
         } /* Image Scan */
       } /* parallel */
     } /* Image Analysis */
+
+    stage('Scan k8s Deploy Code') {
+        steps {
+            container('docker-tools') {
+                sh 'kubesec scan deploy/dso-demo-deploy.yaml'
+            }
+        }
+    } /* stage */
 
     stage('Deploy to Dev') {
 
