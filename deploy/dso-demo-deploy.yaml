@@ -5,6 +5,8 @@ metadata:
   labels:
     app: dso-demo
   name: dso-demo
+  annotations:
+    seccomp.security.alpha.kubernetes.io/pod: "runtime/default"
 spec:
   replicas: 1
   selector:
