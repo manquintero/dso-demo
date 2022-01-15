@@ -131,6 +131,14 @@ pipeline {
       } /* parallel */
     } /* Image Analysis */
 
+    stage('Scan k8s Deploy Code') {
+        steps {
+            container('docker-tools') {
+                sh 'kubesec scan deploy/dso-demo-deploy.yaml'
+            }
+        }
+    } /* stage */
+
     stage('Deploy to Dev') {
 
       environment {
