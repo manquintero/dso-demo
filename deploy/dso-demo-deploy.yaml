@@ -30,11 +30,17 @@ spec:
           allowPrivilegeEscalation: false
           runAsNonRoot: true
           runAsUser: 1000
+          readOnlyRootFilesystem: true
         resources:
           requests:
             cpu: "50m"
             memory: "128Mi"
           limits:
-            memory: "250m"
-            limits: "256Mi"
-status: {}
+            cpu: "250m"
+            memory: "256Mi"
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+      volumes:
+      - name: tmp
+        emptyDir: {}
