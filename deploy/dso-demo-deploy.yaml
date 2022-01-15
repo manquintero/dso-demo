@@ -19,6 +19,8 @@ spec:
       labels:
         app: dso-demo
     spec:
+      automountServiceAccountToken: false
+      serviceAccountName: dso-demo
       containers:
       - image: manquintero/dso-demo
         name: dso-demo
@@ -31,7 +33,7 @@ spec:
           privileged: false
           allowPrivilegeEscalation: false
           runAsNonRoot: true
-          runAsUser: 1000
+          runAsUser: 11000
           readOnlyRootFilesystem: true
         resources:
           requests:
